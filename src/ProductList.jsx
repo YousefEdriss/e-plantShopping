@@ -72,32 +72,10 @@ function ProductList({ onHomeClick }) {
     setShowCart(false);
   };
 
-  const styleObj = {
-    backgroundColor: '#4CAF50',
-    color: '#fff',
-    padding: '15px',
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    fontSize: '20px',
-  };
-
-  const styleObjUl = {
-    display: 'flex',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '1100px',
-  };
-
-  const styleA = {
-    color: 'white',
-    fontSize: '30px',
-    textDecoration: 'none',
-  };
-
   return (
     <div>
-      <div className="navbar" style={styleObj}>
+      {/* Navbar */}
+      <div className="navbar">
         <div className="tag">
           <div className="luxury">
             <img
@@ -112,17 +90,18 @@ function ProductList({ onHomeClick }) {
             </a>
           </div>
         </div>
-        <div style={styleObjUl}>
-          <div><a href="#" onClick={handleCartClick} style={styleA}>🛒 Cart</a></div>
+        <div className="cart">
+          <a href="#" onClick={handleCartClick} className="cart-link">🛒</a>
         </div>
       </div>
 
+      {/* Product Grid */}
       {!showCart ? (
-        <div className="product-grid">
+        <div className="product-section">
           {plantsArray.map((category, index) => (
-            <div key={index}>
+            <div className="category-section" key={index}>
               <h2 className="category-title">{category.category}</h2>
-              <div className="plant-category-grid">
+              <div className="product-row">
                 {category.plants.map((plant) => (
                   <div className="product-card" key={plant.name}>
                     <img src={plant.image} alt={plant.name} className="product-image" />
