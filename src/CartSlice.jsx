@@ -3,37 +3,40 @@ import { createSlice } from '@reduxjs/toolkit';
 export const CartSlice = createSlice({
   name: 'cart',
   initialState: {
-    items: [], // Initialize items as an empty array
+    items: [],
   },
   reducers: {
-    // ✅ Add item to the cart
+    // Add item to cart
     addItem: (state, action) => {
-      const { name, image, cost } = action.payload; // Destructure product details
-      // Check if the item already exists in the cart
-      const existingItem = state.items.find(item => item.name === name);
+      const newItem = action.payload;
+      // check if item already exists
+      const existingItem = state.items.find(item => item.name === newItem.name);
+
       if (existingItem) {
-        // If it already exists, increase its quantity
-        existingItem.quantity++;
+        // if already exists, just increase its quantity
+        existingItem.quantity += 1;
       } else {
-        // Otherwise, add it with quantity = 1
-        state.items.push({ name, image, cost, quantity: 1 });
+        // otherwise, add it with quantity = 1
+        state.items.push({ ...newItem, quantity: 1 });
       }
     },
 
-    // ✅ Remove item from cart
+    // Remove item completely from cart
     removeItem: (state, action) => {
-      // Filter out the item whose name matches the payload
-      state.items = state.items.filter(item => item.name !== action.payload);
+      const nameToRemove = action.payload.name;
+      state.items = state.items.filter(item => item.name !== nameToRemove);
     },
 
-    // ✅ Update item quantity
+    // Update quantity of a specific item
     updateQuantity: (state, action) => {
-      const { name, quantity } = action.payload; // Destructure name and new quantity
-      // Find the item in the cart
-      const itemToUpdate = state.items.find(item => item.name === name);
-      // If found, update its quantity
-      if (itemToUpdate) {
-        itemToUpdate.quantity = quantity;
+      const { name, quantity } = action.payload;
+      const existingItem = state.items.find(item => item.name === name);
+
+      if (existingItem && quantity > 0) {
+        existingItem.quantity = quantity;
+      } else if (existingItem && quantity <= 0) {
+        // if quantity is zero or less, remove the item
+        state.items = state.items.filter(item => item.name !== name);
       }
     },
   },
